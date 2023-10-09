@@ -9,14 +9,17 @@ class Server {
     constructor() {
         this.app = express();
 
-        this.port = process.env.port;
+        this.port = process.env.PORT;
+
+        this.authPath = "/api/auth";
 
         this.usuarioPath = "/api/usuarios";
 
         this.ConectarBD();
-
+        
+        
         this.middleWares();
-
+        
         this.routes();
     }
 
@@ -24,11 +27,12 @@ class Server {
 
     async ConectarBD(){
         await DBconnection();
-        console.log("Base De Datos ON");
+        
     }
 
     middleWares() {
-        this.app.use(cors);
+
+        this.app.use(cors());
 
         this.app.use(express.json());
 
@@ -36,9 +40,13 @@ class Server {
     }
 
 
-    routes() {
-        this.app.use(this.usuarioPath, require("../routes/usuarios.js"));
-    }
+    routes() { 
+        //auth.js
+        this.app.use(this.authPath, require("../routes/auth"));
+        // usuario.js
+        this.app.use(this.usuarioPath, require("../routes/usuarios")); 
+        
+    }
 
     listen() {
         this.app.listen(this.port, () => {
