@@ -15,19 +15,21 @@ class Server {
 
         this.usuarioPath = "/api/usuarios";
 
+        this.categoriasPath = "/api/categorias";
+
         this.ConectarBD();
-        
-        
+
+
         this.middleWares();
-        
+
         this.routes();
     }
 
 
 
-    async ConectarBD(){
+    async ConectarBD() {
         await DBconnection();
-        
+
     }
 
     middleWares() {
@@ -40,13 +42,14 @@ class Server {
     }
 
 
-    routes() { 
+    routes() {
         //auth.js
         this.app.use(this.authPath, require("../routes/auth"));
         // usuario.js
-        this.app.use(this.usuarioPath, require("../routes/usuarios")); 
-        
-    }
+        this.app.use(this.usuarioPath, require("../routes/usuarios"));
+
+        this.app.use(this.categoriasPath, require("../routes/categorias"));
+    }
 
     listen() {
         this.app.listen(this.port, () => {

@@ -28,8 +28,18 @@ const esIdValido = async (id) => {
         throw new Error(`El Id ${id} No Fue Encontrado`);  
     };
 }
+
+const esCategoriaValida = async(id)=>{
+    const Existeusuario = await Usuario.findById(id);
+
+    if(!Existeusuario){
+        throw new Error("La categoria No existe en la base de datos!");
+
+    };
+}
 module.exports = {
     esMailValido,
     esRolValido,
     esIdValido,
+    esCategoriaValida,
 }

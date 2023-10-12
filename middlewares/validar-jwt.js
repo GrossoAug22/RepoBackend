@@ -4,14 +4,14 @@ const jwt = require("jsonwebtoken");
 
 
 
-const validar_jwt = async (res = response, req = request, next) => {
+const validarJWT = async (req = request , res = response, next) => {
     const token = req.header("x-token");
 
     if (!token) {
         return res.status(401).json({
             msg: "Falta El Token En La Peticion!"
         });
-    };
+    }
 
     try {
         const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
@@ -19,13 +19,13 @@ const validar_jwt = async (res = response, req = request, next) => {
         const usuario = await Usuario.findById(uid);
 
         if (!usuario) {
-            return res.json({
+            return res.status(401).json({
                 msg: "El Token No Es Valido! El Usuario no existe!"
             });
         }
 
         if (!usuario.estado) {
-            return res.json({
+            return res.status(401).json({
                 msg: "El Token No Es Valido! El Usuario esta inactivo!"
             });
         }
@@ -45,5 +45,5 @@ const validar_jwt = async (res = response, req = request, next) => {
 
 
 module.exports = {
-    validar_jwt,
+    validarJWT,
 }
